@@ -47,13 +47,6 @@
 
 
 
-<script src="https://s4.zstatic.net/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
-<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/gitalk/1.8.0/gitalk.min.css" />
-
-
-
-
-
 <link rel="stylesheet" href="/css/main.css" />
 
 <meta name="generator" content="Hexo 7.2.0"></head>
@@ -162,34 +155,34 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div class="article">
-    <div>
-        <h1>分类</h1>
-    </div>
-    <div class="info">
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/5/4
+            <div id="archives">
+    
+    <div class="categories-tags">
+        
+        
+        
+        <span>
+            <a href="/categories/Hexo/" style="background: #ff7d73">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Hexo
+            </a>
+        </span>
+        
+        
+        
+        <span>
+            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="background: #ffa2c4">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                渗透测试
+            </a>
         </span>
         
         
     </div>
-    
-    <div class="content" v-pre>
-        
-    </div>
-    
-    
-    
-    <div id="comment">
-        <div id="gitalk-container"></div>
-    </div>
-    
-    
-    
-    
     
 </div>
 
@@ -217,27 +210,6 @@
         
     </div>
     <script src="/js/main.js"></script>
-    
-    
-
-<script>
-    const gitalk = new Gitalk({
-        clientID: "Ov23lipQCs9gZ6B3qpaI",
-        clientSecret: "3ba7609044554573bf647529a53649c2ae567c39",
-        repo: "sprogqvq.github.io",
-        owner: "SprogQVQ",
-        admin: "SprogQVQ".split(","),
-        language: "",
-        id: location.pathname,
-        distractionFreeMode: false,
-        
-    })
-    gitalk.render("gitalk-container");
-</script>
-
-
-
-
     
 </body>
 </html>
